@@ -381,7 +381,11 @@ def train_fetch_kdes(model, x_train, x_valid, y_train, y_valid, layer_names, arg
     layer_idx = 0
     for layer_name in layer_names:
         print(info("Layer: {}".format(layer_name)))
-        idx = int(layer_name.split("_")[1])
+        layer_name_split = layer_name.split("_")
+        if len(layer_name_split) == 2:
+            idx = int(layer_name_split[1])
+        else:
+            idx = 0
         # in case the var_threshold is unsuitable
         if idx == 8:
             kdes_file = args.save_path + "/kdes-pack/%s" % layer_name

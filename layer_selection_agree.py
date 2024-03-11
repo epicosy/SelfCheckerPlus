@@ -39,9 +39,9 @@ def calculate_F1(layers, pred_label_idx):
     TN = np.sum(~TrueMisBehaviour & ~KdePredPositive)
     FN = np.sum(TrueMisBehaviour & ~KdePredPositive)
 
-    TPR = TP / (TP + FN)
-    FPR = FP / (TN + FP)
-    F1 = 2 * TP / (2 * TP + FN + FP)
+    TPR = TP / (TP + FN) if TP + FN != 0 else 0
+    FPR = FP / (TN + FP) if TN + FP != 0 else 0
+    F1 = 2 * TP / (2 * TP + FN + FP) if TP + FN + FP != 0 else 0
 
     return TPR, FPR, F1, TP, FP, FN, TN
 

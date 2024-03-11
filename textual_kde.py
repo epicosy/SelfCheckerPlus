@@ -46,7 +46,6 @@ if __name__ == "__main__":
     model.summary()
 
     layer_names = [layer.name for layer in model.layers]
-    layer_names = layer_names[1:]
 
     x_train_path = dataset_path / "train/x.csv"
     y_train_path = dataset_path / "train/y.csv"
