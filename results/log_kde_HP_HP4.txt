@@ -1,0 +1,62 @@
+Namespace(dataset='HP', model='HP4', flag='test', batch_size=128, save_path='./tmp/HP/HP4/', var_threshold=1e-05, num_classes=2, regularized_kde=True)
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ dense (Dense)               (None, 12)                132       
+                                                                 
+ dense_1 (Dense)             (None, 10)                130       
+                                                                 
+ dense_2 (Dense)             (None, 10)                110       
+                                                                 
+ dense_3 (Dense)             (None, 1)                 11        
+                                                                 
+=================================================================
+Total params: 383 (1.50 KB)
+Trainable params: 383 (1.50 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+Train: (1168, 10) (1168,)
+Val: (146, 10) (146,)
+Test: (146, 10) (146,)
+[92m### y_test len:146 ###[0m
+[94m[test] [0mModel serving
+1/2 [==============>...............] - ETA: 0s2/2 [==============================] - 0s 2ms/step
+[94m[test] [0mProcessing ATs
+Layer: dense
+Layer: dense_1
+Layer: dense_2
+Layer: dense_3
+[92mtest ATs is saved at ./tmp/HP/HP4/test_dense_dense_1_dense_2_dense_3_ats.npy[0m
+[94mLayer: dense[0m
+[92mThe number of removed columns: 3[0m
+[94mload kdes from file:./tmp/HP/HP4//kdes-pack/dense[0m
+[94m[dense] [0mFetching KDE inference
+model accuracy: test, 0.541095890410959
+kde accuracy:test, 0.8356164383561644
+[94mTP: 63  FN: 4  FP: 20  TN: 59[0m
+[92mTPR: 0.9402985074626866  FPR: 0.25316455696202533  F-1: 0.84[0m
+[94mLayer: dense_1[0m
+[92mThe number of removed columns: 0[0m
+[94mload kdes from file:./tmp/HP/HP4//kdes-pack/dense_1[0m
+[94m[dense_1] [0mFetching KDE inference
+model accuracy: test, 0.541095890410959
+kde accuracy:test, 0.863013698630137
+[94mTP: 61  FN: 6  FP: 14  TN: 65[0m
+[92mTPR: 0.9104477611940298  FPR: 0.17721518987341772  F-1: 0.8591549295774648[0m
+[94mLayer: dense_2[0m
+[92mThe number of removed columns: 0[0m
+[94mload kdes from file:./tmp/HP/HP4//kdes-pack/dense_2[0m
+[94m[dense_2] [0mFetching KDE inference
+model accuracy: test, 0.541095890410959
+kde accuracy:test, 0.8561643835616438
+[94mTP: 58  FN: 9  FP: 12  TN: 67[0m
+[92mTPR: 0.8656716417910447  FPR: 0.1518987341772152  F-1: 0.8467153284671532[0m
+[94mLayer: dense_3[0m
+[92mThe number of removed columns: 0[0m
+[94mload kdes from file:./tmp/HP/HP4//kdes-pack/dense_3[0m
+[94m[dense_3] [0mFetching KDE inference
+model accuracy: test, 0.541095890410959
+kde accuracy:test, 0.8424657534246576
+[94mTP: 57  FN: 10  FP: 13  TN: 66[0m
+[92mTPR: 0.8507462686567164  FPR: 0.16455696202531644  F-1: 0.8321167883211679[0m

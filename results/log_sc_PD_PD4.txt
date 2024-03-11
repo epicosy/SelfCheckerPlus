@@ -1,0 +1,10 @@
+path_name: PD/PD4, num_classes: 2
+
+label: 0
+
+label: 1
+TP:8, FP:3, TN:53, FN:13, TPR:0.380952, FPR:0.053571, F1:0.500000
+model accuracy: 0.7272727272727273
+kde accuracy: 0.7792207792207793
+True Positive Rate: 0.38095238095238093
+False Positive Rate: 0.05357142857142857

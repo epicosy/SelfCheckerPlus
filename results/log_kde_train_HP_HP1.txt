@@ -1,0 +1,81 @@
+Namespace(dataset='HP', model='HP1', flag='train', batch_size=128, save_path='./tmp/HP/HP1/', var_threshold=1e-05, num_classes=2, regularized_kde=True)
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ dense (Dense)               (None, 12)                132       
+                                                                 
+ dense_1 (Dense)             (None, 10)                130       
+                                                                 
+ dense_2 (Dense)             (None, 1)                 11        
+                                                                 
+=================================================================
+Total params: 273 (1.07 KB)
+Trainable params: 273 (1.07 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+Train: (1168, 10) (1168,)
+Val: (146, 10) (146,)
+Test: (146, 10) (146,)
+[94m### y_train len:1168 ###[0m
+[92m### y_valid len:146 ###[0m
+[94m[train] [0mModel serving
+ 1/10 [==>...........................] - ETA: 0s10/10 [==============================] - 0s 819us/step
+[94m[train] [0mProcessing ATs
+Layer: dense
+Layer: dense_1
+Layer: dense_2
+[92mtrain ATs is saved at ./tmp/HP/HP1/train_dense_dense_1_dense_2_ats.npy[0m
+[94m[valid] [0mModel serving
+1/2 [==============>...............] - ETA: 0s2/2 [==============================] - 0s 1ms/step
+[94m[valid] [0mProcessing ATs
+Layer: dense
+Layer: dense_1
+Layer: dense_2
+[92mvalid ATs is saved at ./tmp/HP/HP1/valid_dense_dense_1_dense_2_ats.npy[0m
+[94mLayer: dense[0m
+layer_index: 0, var_threshold: 1e-05
+[94mcalc kdes...[0m
+refined ats shape: (11, 579)
+refined ats min max 0.0 ; 2.479515552520752 
+min_kde: 243.46077595054703
+max_kde: 42169.83634815129
+refined ats shape: (11, 589)
+refined ats min max 0.0 ; 1.9801557064056396 
+min_kde: 257.3401667821151
+max_kde: 42612.26106387968
+gaussian_kde(refined_ats) shape[1] sum: 1168
+[92mThe number of removed columns: 1[0m
+[94m[dense] [0mFetching KDE inference
+model accuracy: valid, 0.5068493150684932
+kde accuracy:valid, 0.863013698630137
+[94mTP: 68  FN: 4  FP: 16  TN: 58[0m
+[92mTPR: 0.9444444444444444  FPR: 0.21621621621621623  F-1: 0.8717948717948718[0m
+[94mLayer: dense_1[0m
+remove existing kde functions!
+layer_index: 1, var_threshold: 0
+[94mcalc kdes...[0m
+refined ats shape: (10, 579)
+refined ats min max 0.0 ; 3.0555436611175537 
+min_kde: 81.86542551480927
+max_kde: 21213.077231286617
+refined ats shape: (10, 589)
+refined ats min max 0.0 ; 2.681880474090576 
+min_kde: 98.45707735213205
+max_kde: 24775.023672229447
+gaussian_kde(refined_ats) shape[1] sum: 1168
+[92mThe number of removed columns: 0[0m
+[94m[dense_1] [0mFetching KDE inference
+model accuracy: valid, 0.5068493150684932
+kde accuracy:valid, 0.8698630136986302
+[94mTP: 67  FN: 5  FP: 14  TN: 60[0m
+[92mTPR: 0.9305555555555556  FPR: 0.1891891891891892  F-1: 0.8758169934640523[0m
+[94mLayer: dense_2[0m
+layer_index: 2, var_threshold: 0
+[92mThe number of removed columns: 0[0m
+[94mload kdes from file:./tmp/HP/HP1//kdes-pack/dense_2[0m
+[94m[dense_2] [0mFetching KDE inference
+model accuracy: valid, 0.5068493150684932
+kde accuracy:valid, 0.8561643835616438
+[94mTP: 66  FN: 6  FP: 15  TN: 59[0m
+[92mTPR: 0.9166666666666666  FPR: 0.20270270270270271  F-1: 0.8627450980392157[0m
