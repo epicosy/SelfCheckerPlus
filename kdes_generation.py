@@ -12,6 +12,31 @@ from utils import *
 os.environ['CUDA_VISIBLE_DEVICES'] = '1'  # set GPU Limits
 
 
+class RegularizedKDE(gaussian_kde):
+    def __init__(self, dataset, bw_method=None, alpha=0.1):
+        self.alpha = alpha
+        super().__init__(dataset, bw_method=bw_method)
+
+    def _compute_covariance(self):
+        """Computes the covariance matrix for each Gaussian kernel using
+        covariance_factor().
+        """
+        self.factor = self.covariance_factor()
+        # Cache covariance to avoid re-computing
+        if not hasattr(self, '_data_covariance'):
+            self._data_covariance = np.atleast_2d(
+                np.cov(self.dataset, rowvar=1, bias=False))
+
+            # Add regularization to the diagonal
+            self._data_covariance += self.alpha * np.eye(self._data_covariance.shape[0])
+
+        self._data_inv_cov = np.linalg.inv(self._data_covariance)
+
+        # Set the covariance attribute
+        self.covariance = self._data_covariance
+        self.inv_cov = self._data_inv_cov
+
+
 def _aggr_output(x):
     return [np.mean(x[..., j]) for j in range(x.shape[-1])]
 
@@ -228,7 +253,10 @@ def _get_kdes(train_ats, class_matrix, args):
 
         print("refined ats min max {} ; {} ".format(refined_ats.min(), refined_ats.max()))
 
-        kdes[label] = gaussian_kde(refined_ats)
+        if args.regularized_kde:
+            kdes[label] = RegularizedKDE(refined_ats, bw_method='scott', alpha=0.01)
+        else:
+            kdes[label] = gaussian_kde(refined_ats)
         outputs = kdes[label](refined_ats)
         max_kde[label] = np.max(outputs)
         min_kde[label] = np.min(outputs)
