@@ -18,13 +18,7 @@ Train: (614, 8) (614,)
 Val: (77, 8) (77,)
 Test: (77, 8) (77,)
 [92m### y_test len:77 ###[0m
-[94m[test] [0mModel serving
-1/1 [==============================] - ETA: 0s1/1 [==============================] - 0s 98ms/step
-[94m[test] [0mProcessing ATs
-Layer: dense
-Layer: dense_1
-Layer: dense_2
-[92mtest ATs is saved at ./tmp/PD/PD2/test_dense_dense_1_dense_2_ats.npy[0m
+[92mFound saved test ATs, skip serving[0m
 [94mLayer: dense[0m
 [92mThe number of removed columns: 2[0m
 [94mload kdes from file:./tmp/PD/PD2//kdes-pack/dense[0m

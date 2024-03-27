@@ -150,7 +150,12 @@ for label_agree in range(num_classes):
 
 TPR = TP / (TP + FN)
 FPR = FP / (TN + FP)
+
+TPR = round(TPR * 100, 2)
+FPR = round(FPR * 100, 2)
+
 F1 = 2 * TP / (2 * TP + FN + FP)
+F1 = round(F1 * 100, 2)
 print("TP:{}, FP:{}, TN:{}, FN:{}, TPR:{:.6f}, FPR:{:.6f}, F1:{:.6f}".format(TP, FP, TN, FN, TPR, FPR, F1))
 print("model accuracy: {}".format((FP + TN) / (TP + FP + TN + FN)))
 print("kde accuracy: {}".format((TP_right + FP_right + FN_right + TN_right) / (TP + FP + TN + FN)))

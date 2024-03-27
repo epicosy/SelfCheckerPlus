@@ -20,14 +20,7 @@ Train: (1168, 10) (1168,)
 Val: (146, 10) (146,)
 Test: (146, 10) (146,)
 [92m### y_test len:146 ###[0m
-[94m[test] [0mModel serving
-1/2 [==============>...............] - ETA: 0s2/2 [==============================] - 0s 2ms/step
-[94m[test] [0mProcessing ATs
-Layer: dense
-Layer: dense_1
-Layer: dense_2
-Layer: dense_3
-[92mtest ATs is saved at ./tmp/HP/HP4/test_dense_dense_1_dense_2_dense_3_ats.npy[0m
+[92mFound saved test ATs, skip serving[0m
 [94mLayer: dense[0m
 [92mThe number of removed columns: 3[0m
 [94mload kdes from file:./tmp/HP/HP4//kdes-pack/dense[0m

@@ -3,7 +3,7 @@ path_name: HP/HP2, num_classes: 2
 label: 0
 
 label: 1
-TP:59, FP:12, TN:67, FN:8, TPR:0.880597, FPR:0.151899, F1:0.855072
+TP:59, FP:12, TN:67, FN:8, TPR:88.060000, FPR:15.190000, F1:85.510000
 model accuracy: 0.541095890410959
 kde accuracy: 0.863013698630137
 True Positive Rate: 0.8805970149253731

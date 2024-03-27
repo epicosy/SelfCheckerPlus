@@ -3,7 +3,7 @@ path_name: PD/PD1, num_classes: 2
 label: 0
 
 label: 1
-TP:7, FP:5, TN:51, FN:14, TPR:0.333333, FPR:0.089286, F1:0.424242
+TP:7, FP:5, TN:51, FN:14, TPR:33.330000, FPR:8.930000, F1:42.420000
 model accuracy: 0.7272727272727273
 kde accuracy: 0.7532467532467533
 True Positive Rate: 0.3333333333333333
