@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import numpy as np
 import dill as pickle
@@ -9,8 +10,11 @@ from multiprocessing import Pool
 from scipy.stats import gaussian_kde
 from keras.models import Model
 
-
+from tensorflow.python.client import device_lib
 from selfchecker.utils.log import *
+
+# to enable GPU
+print(device_lib.list_local_devices())
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '1'  # set GPU Limits
 
@@ -241,7 +245,8 @@ def _get_kdes(train_ats, class_matrix, var_threshold: float, num_classes: int):
     max_kde = {}
     min_kde = {}
     tot = 0
-    for label in tqdm(range(num_classes), desc="kde"):
+
+    for label in tqdm(range(num_classes), desc="kde", file=sys.stdout):
         refined_ats = np.transpose(train_ats[class_matrix[label]])
         refined_ats = np.delete(refined_ats, removed_cols, axis=0)
 
@@ -296,7 +301,7 @@ def kde_values_analysis(kdes, removed_cols, target_ats, target_label, target_pre
                         working_dir: Path = None):
     kde_values = np.zeros([target_ats.shape[0], num_classes])
     # obtain 10 kde values for each test
-    for label in tqdm(range(len(kdes)), target_name):
+    for label in tqdm(range(len(kdes)), target_name, file=sys.stdout):
         refined_ats = np.transpose(target_ats)
         refined_ats = np.delete(refined_ats, removed_cols, axis=0)
         kde_values.T[label] = kdes[label](refined_ats)
