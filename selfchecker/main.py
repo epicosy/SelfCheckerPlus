@@ -34,6 +34,7 @@ def read_split(x: str, y: str):
         y_data = np.load(y_path)
     else:
         # TODO: add case for files with no headers
+        # TODO: does not handle the case where the labels are not integers
         y_data = np.genfromtxt(y_path, dtype=int, skip_header=1)
 
     return x_data, y_data
@@ -48,6 +49,7 @@ if __name__ == '__main__':
     parser.add_argument('-wd', '--workdir', type=str, help='Working directory', required=False)
     parser.add_argument("--var_threshold", "-var_threshold", help="Variance threshold", type=float,
                         default=1e-5)
+    parser.add_argument("-bs", "--batch_size", help="Batch size", type=int, default=128)
 
     action_parser = parser.add_subparsers(dest='action')
 
@@ -74,7 +76,7 @@ if __name__ == '__main__':
         num_classes = len(labels)
         print(f"Number of classes: {num_classes}")
         train_fetch_kdes(model, x_train, x_valid, y_train, y_valid, layer_names, working_dir, args.var_threshold,
-                         num_classes)
+                         num_classes, args.batch_size)
 
         layer_selection_agree(len(layer_names), labels, working_dir)
         layer_selection_condition(len(layer_names), labels, working_dir)
@@ -87,7 +89,7 @@ if __name__ == '__main__':
 
         print(f"Number of classes: {num_classes}")
 
-        test_fetch_kdes(model, x_test, y_test, layer_names, num_classes, working_dir)
+        test_fetch_kdes(model, x_test, y_test, layer_names, num_classes, args.batch_size, working_dir)
         eval_performance(num_classes, working_dir)
 
     else:

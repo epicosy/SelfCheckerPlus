@@ -134,7 +134,8 @@ def get_ats(
     return ats, pred
 
 
-def _get_train_ats(model, x_train: np.ndarray, x_valid: np.ndarray, layer_names: list, working_dir: Path):
+def _get_train_ats(model, x_train: np.ndarray, x_valid: np.ndarray, layer_names: list, batch_size: int,
+                   working_dir: Path):
     """Extract ats of train and validation inputs. If there are saved files, then skip it.
 
     Args:
@@ -142,6 +143,7 @@ def _get_train_ats(model, x_train: np.ndarray, x_valid: np.ndarray, layer_names:
         x_train (ndarray): Set of training inputs.
         x_valid (ndarray): Set of validation inputs.
         layer_names (list): List of selected layer names.
+        batch_size (int): Size of batch when serving.
         working_dir (Path): Path of working directory.
 
     Returns:
@@ -164,6 +166,7 @@ def _get_train_ats(model, x_train: np.ndarray, x_valid: np.ndarray, layer_names:
             "train",
             layer_names,
             save_path=saved_train_path,
+            batch_size=batch_size,
         )
         print(infog("train ATs is saved at " + saved_train_path[0]))
 
@@ -180,19 +183,21 @@ def _get_train_ats(model, x_train: np.ndarray, x_valid: np.ndarray, layer_names:
             "valid",
             layer_names,
             save_path=saved_valid_path,
+            batch_size=batch_size,
         )
         print(infog("valid" + " ATs is saved at " + saved_valid_path[0]))
 
     return train_ats, train_pred, valid_ats, valid_pred
 
 
-def _get_target_ats(model, x_test, layer_names, working_dir: Path):
+def _get_target_ats(model, x_test, layer_names, batch_size: int, working_dir: Path):
     """Extract ats of train and validation inputs. If there are saved files, then skip it.
 
     Args:
         model (keras model): Subject model.
         x_test (ndarray): Set of testing inputs.
         layer_names (list): List of selected layer names.
+        batch_size (int): Size of batch when serving.
         working_dir (Path): Path of working directory.
 
     Returns:
@@ -213,6 +218,7 @@ def _get_target_ats(model, x_test, layer_names, working_dir: Path):
             "test",
             layer_names,
             save_path=saved_test_path,
+            batch_size=batch_size,
         )
         print(infog("test" + " ATs is saved at " + saved_test_path[0]))
 
@@ -370,7 +376,7 @@ def save_results(fileName, obj):
 
 
 def train_fetch_kdes(model, x_train: np.ndarray, x_valid: np.ndarray, y_train: np.ndarray, y_valid: np.ndarray,
-                     layer_names: list, working_dir: Path, var_threshold: float, num_classes: int):
+                     layer_names: list, working_dir: Path, var_threshold: float, num_classes: int, batch_size: int):
     """kde functions and kde inferred classes per class for all layers
 
     Args:
@@ -383,6 +389,7 @@ def train_fetch_kdes(model, x_train: np.ndarray, x_valid: np.ndarray, y_train: n
         working_dir (Path): Path of working directory.
         var_threshold (float): Threshold of variance.
         num_classes (int): Number of classes.
+        batch_size (int): Size of batch when serving.
     Returns:
         None
         There is no returns but will save kde functions per class and inferred classes for all layers
@@ -395,7 +402,7 @@ def train_fetch_kdes(model, x_train: np.ndarray, x_valid: np.ndarray, y_train: n
 
     # generate feature vectors for each layer on training, validation set
     all_train_ats, train_pred, all_valid_ats, valid_pred = _get_train_ats(model, x_train, x_valid, layer_names,
-                                                                          working_dir)
+                                                                          batch_size, working_dir)
 
     # obtain the input indexes for each class
     class_matrix = {}
@@ -474,7 +481,7 @@ def train_fetch_kdes(model, x_train: np.ndarray, x_valid: np.ndarray, y_train: n
     np.save(working_dir / "pred_labels_valid", pred_labels_concat_valid)
 
 
-def test_fetch_kdes(model, x_test, y_test, layer_names, num_classes, working_dir: Path):
+def test_fetch_kdes(model, x_test, y_test, layer_names, num_classes, batch_size: int, working_dir: Path):
     """kde functions and kde inferred classes per class for all layers
 
     Args:
@@ -482,6 +489,8 @@ def test_fetch_kdes(model, x_test, y_test, layer_names, num_classes, working_dir
         x_test (ndarray): Set of testing inputs.
         y_test (ndarray): Ground truth of testing inputs.
         layer_names (list): List of selected layer names.
+        num_classes (int): Number of classes.
+        batch_size (int): Size of batch when serving.
         working_dir (Path): Path of working directory.
 
     Returns:
@@ -495,7 +504,7 @@ def test_fetch_kdes(model, x_test, y_test, layer_names, num_classes, working_dir
     model_output_idx = _get_model_output_idx(model, layer_names)
 
     # generate feature vectors for each layer on training, validation set
-    all_test_ats, test_pred = _get_target_ats(model, x_test, layer_names, working_dir)
+    all_test_ats, test_pred = _get_target_ats(model, x_test, layer_names, batch_size, working_dir)
 
     pred_labels_test = np.zeros([x_test.shape[0], (len(layer_names) + 1)])
     layer_idx = 0
