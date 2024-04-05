@@ -66,7 +66,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     model = get_model(model_path=args.model)
     working_dir = Path(args.workdir) if args.workdir else results_path
-    layer_names = [layer.name for layer in model.layers]
+    layer_names = [layer.name for layer in model.layers if 'activation' in layer.name]
 
     if args.action == 'analyze':
         x_train, y_train = read_split(args.train_features, args.train_labels)
