@@ -277,7 +277,16 @@ def _get_kdes(train_ats, class_matrix, var_threshold: float, num_classes: int):
             print("Regularizing KDE")
             kdes[label] = RegularizedKDE(refined_ats, bw_method='scott', alpha=0.01)
 
-        outputs = kdes[label](refined_ats)
+        try:
+            outputs = kdes[label](refined_ats)
+        except np.linalg.LinAlgError as lae:
+            print("LinAlgError: %s" % lae)
+            print("refined_ats shape: {}".format(refined_ats.shape))
+            print("refined_ats min max {} ; {} ".format(refined_ats.min(), refined_ats.max()))
+            print("Regularizing KDE")
+            kdes[label] = RegularizedKDE(refined_ats, bw_method='scott', alpha=0.01)
+            outputs = kdes[label](refined_ats)
+
         max_kde[label] = np.max(outputs)
         min_kde[label] = np.min(outputs)
         print("min_kde: %s" % min_kde[label])

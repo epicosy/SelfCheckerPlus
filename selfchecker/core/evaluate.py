@@ -93,23 +93,25 @@ def eval_performance(num_classes: int, working_dir: Path):
         FP_idx_pos = []
 
         for label_acc in range(num_classes):
-            if (str(label_agree) + str(label_acc)) not in layers_accuracy.keys():
+            layers_accuracy_key = str(label_agree) + str(label_acc)
+
+            if layers_accuracy_key not in layers_accuracy.keys():
                 continue
 
             kde_preds = np.zeros([pos_indexes.shape[0], num_classes])
             count_idx = 0
 
             for idx in pos_indexes:
-                for layer_idx in layers_accuracy[str(label_agree) + str(label_acc)]:
+                for layer_idx in layers_accuracy[layers_accuracy_key]:
                     kde_preds[count_idx][int(pred_labels[pred_label_idx[idx]][layer_idx])] += 1
                 count_idx += 1
 
-            kde_preds /= len(layers_accuracy[str(label_agree) + str(label_acc)])
+            kde_preds /= len(layers_accuracy[layers_accuracy_key])
 
-            if layers_weight[str(label_agree) + str(label_acc)] == 0.0:
+            if layers_weight[layers_accuracy_key] == 0.0:
                 kde_preds *= 1.0 / num_classes
             else:
-                kde_preds *= layers_weight[str(label_agree) + str(label_acc)]
+                kde_preds *= layers_weight[layers_accuracy_key]
 
             pred_of_label.T[label_acc] = kde_preds.T[label_acc]
 
@@ -181,8 +183,29 @@ def eval_performance(num_classes: int, working_dir: Path):
     F1 = 2 * TP / (2 * TP + FN + FP)
     F1 = round(F1 * 100, 2)
 
+    precision = TP / (TP + FP)
+    recall = TP / (TP + FN)
+
+    MCC = (TP * TN - FP * FN) / np.sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN))
+
     print("TP:{}, FP:{}, TN:{}, FN:{}, TPR:{:.6f}, FPR:{:.6f}, F1:{:.6f}".format(TP, FP, TN, FN, TPR, FPR, F1))
     print("model accuracy: {}".format((FP + TN) / (TP + FP + TN + FN)))
     print("kde accuracy: {}".format((TP_right + FP_right + FN_right + TN_right) / (TP + FP + TN + FN)))
     print("True Positive Rate: {}".format(TP / (TP + FN)))
     print("False Positive Rate: {}".format(FP / (TN + FP)))
+
+    performance = {
+        "tpr": float(TPR),
+        "fpr": float(FPR),
+        "f1": float(F1),
+        "mcc": float(MCC),
+        "tps": int(TP),
+        "fps": int(FP),
+        "tns": int(TN),
+        "fns": int(FN),
+        "precision": float(precision),
+        "recall": float(recall)
+    }
+
+    with open(working_dir / "performance.json", "w") as json_file:
+        json.dump(performance, json_file)
