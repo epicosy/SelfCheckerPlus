@@ -40,6 +40,32 @@ def read_split(x: str, y: str):
     return x_data, y_data
 
 
+def get_layers(layers: list, only_activation: bool, only_dense: bool):
+    target_layers = []
+
+    if only_dense and only_activation:
+        include_next = False
+
+        for layer in layers:
+            if layer.name.startswith('dense'):
+                include_next = True
+                target_layers.append(layer.name)
+            elif layer.name.startswith('activation') and include_next:
+                include_next = False
+                target_layers.append(layer.name)
+        print("Dense layers and associated activation layers are considered:", target_layers)
+    elif only_dense:
+        target_layers = [layer.name for layer in layers if 'dense' in layer.name]
+        print("Only dense layers are considered:", target_layers)
+    elif only_activation:
+        target_layers = [layer.name for layer in layers if 'activation' in layer.name]
+        print("Only activation layers of dense layers are considered: ", target_layers)
+    else:
+        target_layers = [layer.name for layer in layers]
+
+    return target_layers
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='A self-checking tool for Deep Neural Networks to detect the '
                                                  'potentially incorrect model decision and generate advice to '
@@ -50,7 +76,9 @@ if __name__ == '__main__':
     parser.add_argument("--var_threshold", "-var_threshold", help="Variance threshold", type=float,
                         default=1e-5)
     parser.add_argument("-bs", "--batch_size", help="Batch size", type=int, default=128)
-    parser.add_argument("-al", "--activation_layers", help="Only activation layers", action='store_true')
+    parser.add_argument("-oal", "--only_activation_layers", help="Only activation layers",
+                        action='store_true')
+    parser.add_argument("-odl", "--only_dense_layers", help="Only dense layers", action='store_true')
 
     action_parser = parser.add_subparsers(dest='action')
 
@@ -68,10 +96,7 @@ if __name__ == '__main__':
     model = get_model(model_path=args.model)
     working_dir = Path(args.workdir) if args.workdir else results_path
 
-    if args.activation_layers:
-        layer_names = [layer.name for layer in model.layers if 'activation' in layer.name]
-    else:
-        layer_names = [layer.name for layer in model.layers]
+    layer_names = get_layers(model.layers, args.only_activation_layers, args.only_dense_layers)
 
     if args.action == 'analyze':
         x_train, y_train = read_split(args.train_features, args.train_labels)
