@@ -50,6 +50,7 @@ if __name__ == '__main__':
     parser.add_argument("--var_threshold", "-var_threshold", help="Variance threshold", type=float,
                         default=1e-5)
     parser.add_argument("-bs", "--batch_size", help="Batch size", type=int, default=128)
+    parser.add_argument("-al", "--activation_layers", help="Only activation layers", action='store_true')
 
     action_parser = parser.add_subparsers(dest='action')
 
@@ -66,7 +67,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     model = get_model(model_path=args.model)
     working_dir = Path(args.workdir) if args.workdir else results_path
-    layer_names = [layer.name for layer in model.layers if 'activation' in layer.name]
+
+    if args.activation_layers:
+        layer_names = [layer.name for layer in model.layers if 'activation' in layer.name]
+    else:
+        layer_names = [layer.name for layer in model.layers]
 
     if args.action == 'analyze':
         x_train, y_train = read_split(args.train_features, args.train_labels)
