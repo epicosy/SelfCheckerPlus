@@ -183,10 +183,12 @@ def eval_performance(num_classes: int, working_dir: Path):
     F1 = 2 * TP / (2 * TP + FN + FP)
     F1 = round(F1 * 100, 2)
 
-    precision = TP / (TP + FP)
-    recall = TP / (TP + FN)
+    precision = round((TP / (TP + FP))*100, 2)
+    recall = round((TP / (TP + FN))*100, 2)
 
-    MCC = (TP * TN - FP * FN) / np.sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN))
+    mcc_covar = TP * TN - FP * FN
+    mcc_denom = np.sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN))
+    mcc = round(mcc_covar / mcc_denom, 3) if mcc_denom > 0 else 0
 
     print("TP:{}, FP:{}, TN:{}, FN:{}, TPR:{:.6f}, FPR:{:.6f}, F1:{:.6f}".format(TP, FP, TN, FN, TPR, FPR, F1))
     print("model accuracy: {}".format((FP + TN) / (TP + FP + TN + FN)))
@@ -198,7 +200,7 @@ def eval_performance(num_classes: int, working_dir: Path):
         "tpr": float(TPR),
         "fpr": float(FPR),
         "f1": float(F1),
-        "mcc": float(MCC),
+        "mcc": float(mcc),
         "tps": int(TP),
         "fps": int(FP),
         "tns": int(TN),
