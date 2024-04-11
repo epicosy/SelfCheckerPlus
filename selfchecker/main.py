@@ -73,8 +73,6 @@ if __name__ == '__main__':
 
     parser.add_argument('-m', '--model', type=str, help='Path to the model', required=True)
     parser.add_argument('-wd', '--workdir', type=str, help='Working directory', required=False)
-    parser.add_argument("--var_threshold", "-var_threshold", help="Variance threshold", type=float,
-                        default=1e-5)
     parser.add_argument("-bs", "--batch_size", help="Batch size", type=int, default=128)
     parser.add_argument("-oal", "--only_activation_layers", help="Only activation layers",
                         action='store_true')
@@ -87,6 +85,8 @@ if __name__ == '__main__':
     analyze_parser.add_argument('-ty', '--train_labels', type=str, help='Train labels', required=True)
     analyze_parser.add_argument('-vx', '--val_features', type=str, help='Val. features', required=True)
     analyze_parser.add_argument('-vy', '--val_labels', type=str, help='Val. labels', required=True)
+    analyze_parser.add_argument("--var_threshold", "-var_threshold", help="Variance threshold", type=float,
+                                default=1e-5)
 
     infer_parser = action_parser.add_parser('infer')
     infer_parser.add_argument('-tx', '--test_features', type=str, help='Test features', required=True)
