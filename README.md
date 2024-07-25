@@ -1,113 +1,64 @@
+# SelfCheckerPlus
+This repository provides an improved version of the tool published in:
 
-<h1 align="center">SelfChecker</h1>
-
-
-
-<p align="center">
-<center>
-<b>A self-checking tool for Deep Neural Networks to detect the potentially incorrect model decision and generate advice to auto-correct the model decision on runtime.</b>
-<br/>
-<a href=""><img src="img/Selfchecker.png" alt="Logo" width=100%></a>
-</center>
-</p>
+Y. Xiao et al., "Self-Checking Deep Neural Networks in Deployment," 2021 IEEE/ACM 43rd International Conference on Software Engineering (ICSE), Madrid, ES, 2021, pp. 372-384, doi: 10.1109/ICSE43902.2021.00044.
 
 
+## Installation
 
-<p align="center">
-    the International Conference on Software Engineering (<b>ICSE</b>), May 2021.
-    <br />
-    <a href="https://yanxiao6.github.io/"><strong>Yan Xiao</strong></a>
-    ·
-    <a href="https://www.cs.ubc.ca/~bestchai/"><strong>Ivan Beschastnikh</strong></a>
-    ·
-    <a href="https://cs.gmu.edu/~dsr/"><strong>David S. Rosenblum</strong></a>
-    ·
-    <a href="https://sunchangsheng.com"><strong>Changsheng Sun</strong></a>
-    ·
-    <a href="https://engineering.virginia.edu/faculty/sebastian-elbaum"><strong>Sebastian Elbaum</strong></a>
-    <br/>
-    <a href="http://linyun.info"><strong>Yun Lin</strong></a>
-    ·
-    <a href="https://www.comp.nus.edu.sg/~dongjs/"><strong>Jin Song Dong</strong></a>
-    <br/><br/>
-    <a href="https://www.comp.nus.edu.sg"><img src="https://www.comp.nus.edu.sg/templates/t3_nus2015/images/assets/logos/logo.png" alt="Logo" width=25%> </a> 
-    <br/><br/>
-  </p>
-
-
-<p align="center">
-    <!-- <a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white"></a>
-    <a href="https://pytorchlightning.ai/"><img alt="Lightning" src="https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white"></a><br><br> -->
-    <a href='https://dl.acm.org/doi/abs/10.1109/ICSE43902.2021.00044'>
-      <img src='https://img.shields.io/badge/Paper-PDF-green?style=flat' alt='Paper PDF'>
-    </a>
-    <a href='https://arxiv.org/abs/2103.02371'>
-      <img src='https://img.shields.io/badge/arXiv-2103.02371-red?style=flat' alt='Paper PDF'>
-    </a> 
-    <a href='https://trustdnn.comp.nus.edu.sg' style='padding-left: 0.5rem;'>
-      <img src='https://img.shields.io/badge/Project-Page-blue?style=flat&logo=Google%20chrome&logoColor=blue' alt='Project Page'>
-    <a href='https://youtu.be/0k7H3ZNgARE' style='padding-left: 0.5rem;'>
-      <img src='https://img.shields.io/badge/Youtube-Video-red?style=flat&logo=youtube&logoColor=red' alt='Youtube Video'>
-    </a>
-   
-  </p>
-</p>
-
-## Introduction
-
-In this paper we describe a self-checking system, called SelfChecker, that triggers an alarm if the internal layer features of the model are inconsistent with the final prediction. 
-
-SelfChecker also provides advice in the form of an alternative prediction. This archive includes codes for generating probability density functions, performing layer selections, and alarm and advice analyses.
-
-<center>
-<a href=""><img src="img/attn.png" alt="Logo" width=45%> </a>
-</center>
-
-## Repo structure
-
-We will update .py files later.
-
-- `utils.py` - Util functions for log.
-- `main_kde.py` - Obtain density functions for the combination of classes and layers and inferred classes.
-- `kdes_generation.py` - Contain functions for generating density functions and inferred classes.
-- `layer_selection_agree.py` - Layer selection for alarm.
-- `layer_selection_condition.py` - Layer selection for advice.
-- `layer_selection_condition_neg.py` - Layer selection for advice.
-- `sc.py` - Alarm and advice analysis.
-- `models/` - Folder contains pre-trained models.
-- `tmp/` - Folder saving density functions and inferred classes.
-
-## Dependencies
-
-```bash
-conda env create -f sc.yml
-conda activate sc
+1. Clone the repository:
+```shell
+$ git clone <repository-url>
+$ cd <repository-directory>
 ```
 
-## How to run the demo
-
-- We prepare a pre-trained model ConvNet on CIFAR-10: python sc.pyc
-- To run the whole project: 
-    ```bash
-    bash exe_train.sh
-    bash exe_deploy.sh
-    ```
-
-## Citation
-```bibtex
-@inproceedings{xiao2021self,
-  title={Self-checking deep neural networks in deployment},
-  author={Xiao, Yan and Beschastnikh, Ivan and Rosenblum, David S and Sun, Changsheng and Elbaum, Sebastian and Lin, Yun and Dong, Jin Song},
-  booktitle={2021 IEEE/ACM 43rd International Conference on Software Engineering (ICSE)},
-  pages={372--384},
-  year={2021},
-  organization={IEEE}
-}
+2. Set up a virtual environment (optional but recommended):
+```shell
+$ python3.10 -m venv env
+$ source env/bin/activate
 ```
 
-## License
-This code and model are available for non-commercial scientific research purposes as defined in the [LICENSE](LICENSE) file. By downloading and using the code and model you agree to the terms in the [LICENSE](LICENSE).
+3. Install the required dependencies:
+```shell
+$ pip install -r requirements.txt
+```
 
-## Contact
+### Usage
 
-For more questions, please contact cssun@u.nus.edu
+```
+usage: main.py [-h] -m MODEL [-wd WORKDIR] [-bs BATCH_SIZE] [-oal] [-odl] {analyze,infer} ...
+```
+
+A self-checking tool for Deep Neural Networks to detect the potentially incorrect model decision and generate advice
+to auto-correct the model decision on runtime.
+
+positional arguments:
+  {analyze,infer}
+
+options:
+-  -m MODEL, --model MODEL (Path to the model)
+-  -wd WORKDIR, --workdir WORKDIR (Working directory)
+-  -bs BATCH_SIZE, --batch_size BATCH_SIZE (Sets batch size - default is 128)
+-  -oal, --only_activation_layers (Analyze only the dense layers)
+-  -odl, --only_dense_layers (Analyze only the activation layers)
+
+
+#### Analyze Command
+Obtains the density functions for the combination of classes and layers and inferred classes.
+It also performs the Layer selection for alarm and advice.
+
+
+```shell
+$ python -m selfchecker.main -m path/to/your/model.h5 -wd /path/to/working/directory analyze -tx path/to/train/features.npy -ty path/to/train/labels.npy -vx path/to/val/features.npy -vy path/to/val/labels.npy
+```
+
+##### Optional Arguments:
+- --var_threshold, -var_threshold: Set the variance threshold (default is 1e-5).
+
+
+#### Infer Command
+Performs the alarm and advice analysis.
+
+```shell
+$ python selfcheckerplus.py -m path/to/your/model.h5 -wd /path/to/working/directory infer -tx path/to/test/features.npy -ty path/to/test/labels.npy
+```
